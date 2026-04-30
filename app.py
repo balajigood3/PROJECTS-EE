@@ -16,9 +16,24 @@ st.set_page_config(page_title="EEAMB", layout="wide")
 # =========================================
 # LOAD / TRAIN MODEL
 # =========================================
-# Add the 'r' before the opening quote
-MODEL_PATH = r"c:\Balaji-AI\MY PROJECTS\EEE\eeamb_model.pk1"
-DATA_PATH = r"c:\Balaji-AI\MY PROJECTS\EEE\EEAMB.csv"
+import pandas as pd
+from pathlib import Path
+import streamlit as st
+
+# 1. Get the directory where app.py is located
+BASE_DIR = Path(__file__).resolve().parent
+
+# 2. Point to the CSV inside the 'data' folder
+DATA_PATH = BASE_DIR / "data" / "EEAMB.csv"
+
+@st.cache_data
+def load_or_train():
+    if not DATA_PATH.exists():
+        st.error(f"❌ File not found at: {DATA_PATH}")
+        st.stop()  # Stops the app gracefully so you don't get the big red traceback
+    
+    df = pd.read_csv(DATA_PATH)
+    # ... rest of your code
 
 @st.cache_resource
 def load_or_train():
